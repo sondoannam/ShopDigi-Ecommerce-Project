@@ -19,7 +19,10 @@ const Cart = () => {
   const [productUpdateDetail, setProductUpdateDetail] = useState(null);
   const [totalAmount, setTotalAmount] = useState(0);
   const [listChecked, setListChecked] = useState([]);
-  const userCartState = useSelector((state) => state?.auth?.cartProducts);
+  // Fetch product cart
+  useEffect(() => {
+    dispatch(getUserCart());
+  }, []);
   
   useEffect(() => {
     userCartState?.forEach((item) => {
@@ -29,11 +32,8 @@ const Cart = () => {
       }));
     });
   }, []);
-
-  // Fetch product cart
-  useEffect(() => {
-    dispatch(getUserCart());
-  }, []);
+  
+  const userCartState = useSelector((state) => state?.auth?.cartProducts);
 
   // Update product cart - quantity
   useEffect(() => {
@@ -48,7 +48,7 @@ const Cart = () => {
         dispatch(getUserCart());
       }, 300);
     }
-  }, [dispatch, productUpdateDetail]);
+  }, [productUpdateDetail]);
 
   // Remove product from cart
   const deleteAProductCart = (id) => {

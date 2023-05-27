@@ -197,7 +197,7 @@ export const userSlice = createSlice({
                 state.isError = true;
                 state.isSuccess = false;
                 state.message = action.error;
-                if (state.isError === true) toast.error("Something went wrong");
+                if (state.isError === true) toast.error(action.payload.response.data.message);
             })
             .addCase(login.pending, (state) => {
               state.isLoading = true;
@@ -217,7 +217,7 @@ export const userSlice = createSlice({
               state.isSuccess = false;
               state.message = action.error;
               state.isLoading = false;
-              if (state.isError === true) toast.error("Login failed!");
+              if (state.isError === true) toast.error(action.payload.response.data.message);
             })
             .addCase(getUserProductWishlist.pending, (state) => {
               state.isLoading = true;
@@ -354,7 +354,20 @@ export const userSlice = createSlice({
               state.isLoading = false;
               state.isSuccess = true;
               state.updatedProfile = action.payload;
-              if (state.isSuccess) toast.success('Your profile is updated successfully!');
+              if (state.isSuccess) {
+                let currentUserData = JSON.parse(localStorage.getItem('user'));
+                let newUserData = {
+                  _id: currentUserData?._id,
+                  token: currentUserData?.token,
+                  firstname: action?.payload?.firstname,
+                  lastname: action?.payload?.lastname,
+                  email: action?.payload?.email,
+                  mobile: action?.payload?.mobile,
+                };
+                localStorage.setItem('user', JSON.stringify(newUserData));
+                state.user = newUserData;
+                toast.success('Your profile is updated successfully!');
+              }
             })
             .addCase(updateProfile.rejected, (state, action) => {
               state.isLoading = false;

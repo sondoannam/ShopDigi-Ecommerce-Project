@@ -23,16 +23,15 @@ let signUpSchema = yup.object().shape({
 const Signup = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const authState = useSelector((state) => state);
-  const { user, isLoading, isError, isSuccess } = authState.auth;
+  const authState = useSelector((state) => state?.auth);
 
   useEffect(() => {
-    if (!user == null || isSuccess) {
+    if (authState.createdUser !== null && authState.isSuccess) {
       navigate("/");
     } else {
       navigate("/register");
     }
-  }, [user, isLoading, isError, isSuccess]);
+  }, [authState]);
 
   const formik = useFormik({
     initialValues: {
