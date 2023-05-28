@@ -23,16 +23,18 @@ const Cart = () => {
   useEffect(() => {
     dispatch(getUserCart());
   }, []);
-  
+
   useEffect(() => {
     userCartState?.forEach((item) => {
-      dispatch(selectProductCart({
-        cartItemId: item?._id,
-        checked: 'Unchecked',
-      }));
+      dispatch(
+        selectProductCart({
+          cartItemId: item?._id,
+          checked: "Unchecked",
+        })
+      );
     });
   }, []);
-  
+
   const userCartState = useSelector((state) => state?.auth?.cartProducts);
 
   // Update product cart - quantity
@@ -61,42 +63,50 @@ const Cart = () => {
   // Select & unselect product in cart
   const handleChange = (e) => {
     //console.log(e.target.value);
-    if(listChecked.includes(e.target.value)){
-      const newListChecked = listChecked.filter((item) => item !== e.target.value);
+    if (listChecked.includes(e.target.value)) {
+      const newListChecked = listChecked.filter(
+        (item) => item !== e.target.value
+      );
       setListChecked(newListChecked);
-      dispatch(selectProductCart({
-        cartItemId: e.target.value,
-        checked: 'Unchecked',
-      }))
-    }else {
+      dispatch(
+        selectProductCart({
+          cartItemId: e.target.value,
+          checked: "Unchecked",
+        })
+      );
+    } else {
       setListChecked([...listChecked, e.target.value]);
     }
-  }
+  };
 
   const handleOnchangeCheckAll = (e) => {
-    if(e.target.checked) {
+    if (e.target.checked) {
       const newListChecked = [];
       userCartState?.forEach((item) => {
         newListChecked.push(item?._id);
-      })
+      });
       setListChecked(newListChecked);
-    }else {
+    } else {
       setListChecked([]);
       userCartState?.forEach((item) => {
-        dispatch(selectProductCart({
-          cartItemId: item?._id,
-          checked: 'Unchecked',
-        }));
+        dispatch(
+          selectProductCart({
+            cartItemId: item?._id,
+            checked: "Unchecked",
+          })
+        );
       });
     }
   };
 
   useEffect(() => {
     for (const element of listChecked) {
-      dispatch(selectProductCart({
-        cartItemId: element,
-        checked: 'Checked',
-      }));
+      dispatch(
+        selectProductCart({
+          cartItemId: element,
+          checked: "Checked",
+        })
+      );
     }
   }, [listChecked]);
 
@@ -105,15 +115,13 @@ const Cart = () => {
     let sum = 0;
 
     if (listChecked.length !== 0) {
-      let itemFound = userCartState.filter(({_id}) => {
+      let itemFound = userCartState.filter(({ _id }) => {
         return listChecked.includes(_id);
       });
       for (let index = 0; index < itemFound?.length; index++) {
-        sum +=
-          (Number(itemFound[index]?.quantity) * itemFound[index]?.price);
+        sum += Number(itemFound[index]?.quantity) * itemFound[index]?.price;
       }
-    }
-    else sum = 0;
+    } else sum = 0;
     setTotalAmount(sum);
   }, [listChecked]);
 
@@ -128,27 +136,27 @@ const Cart = () => {
 
       <Container class1="cart-wrapper home-wrapper-2 py-5">
         <div className="row">
-          <div className="col-12">
-            <div className="cart-header d-flex justify-content-between align-items-center py-3">
-              <div
-                style={{ display: "inline-block" }}
-                className="form-check cart-col-0"
-              >
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  id="flexCheckDefault"
-                  onChange={handleOnchangeCheckAll}
-                  checked={listChecked?.length === userCartState?.length}
-                />
+          {userCartState && userCartState.length !== 0 ? (
+            <div className="col-12">
+              <div className="cart-header d-flex justify-content-between align-items-center py-3">
+                <div
+                  style={{ display: "inline-block" }}
+                  className="form-check cart-col-0"
+                >
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    id="flexCheckDefault"
+                    onChange={handleOnchangeCheckAll}
+                    checked={listChecked?.length === userCartState?.length}
+                  />
+                </div>
+                <h4 className="cart-col-1">Product</h4>
+                <h4 className="cart-col-2">Price</h4>
+                <h4 className="cart-col-3">Quantity</h4>
+                <h4 className="cart-col-4">Total</h4>
               </div>
-              <h4 className="cart-col-1">Product</h4>
-              <h4 className="cart-col-2">Price</h4>
-              <h4 className="cart-col-3">Quantity</h4>
-              <h4 className="cart-col-4">Total</h4>
-            </div>
-            {userCartState &&
-              userCartState?.map((item, index) => {
+              {userCartState?.map((item, index) => {
                 return (
                   <div
                     key={index}
@@ -207,6 +215,7 @@ const Cart = () => {
                         <AiFillDelete
                           onClick={() => deleteAProductCart(item?._id)}
                           className="text-danger"
+                          style={{ fontSize: "24px",cursor: "pointer" }}
                         />
                       </div>
                     </div>
@@ -218,7 +227,12 @@ const Cart = () => {
                   </div>
                 );
               })}
-          </div>
+            </div>
+          ) : (
+            <div className="col-12 text-center text-black-50">
+              <h5>Your cart is empty...</h5>
+            </div>
+          )}
           <div className="col-12 py-2 mt-4">
             <div className="d-flex justify-content-between align-items-baseline">
               <Link to="/product" className="button">

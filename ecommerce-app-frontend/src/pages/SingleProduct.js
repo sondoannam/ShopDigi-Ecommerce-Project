@@ -15,10 +15,8 @@ import Zoom from "react-medium-image-zoom";
 import "react-medium-image-zoom/dist/styles.css";
 import { toast } from "react-toastify";
 import { addProductToCart, getSingleUser, getUserCart } from "../features/user/userSlice";
-import userService from "../features/user/userService";
 import ReactDOM from "react-dom";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import axios from "axios";
 
 const SingleProduct = () => {
   const [copied, setCopied] = useState(false);
@@ -31,23 +29,20 @@ const SingleProduct = () => {
   const navigate = useNavigate();
   const getProductId = location.pathname.split("/")[2];
   const dispatch = useDispatch();
+  
+  useEffect(() => {
+    dispatch(getAProduct(getProductId));
+    dispatch(getProducts());
+    dispatch(getUserCart());
+  }, []);
+  
   const cartState = useSelector((state) => state?.auth?.cartProducts);
-  console.log(cartState);
-  const productState = useSelector((state) => state?.product?.product);
+  const productState = useSelector((state) => state?.product?.singleProduct);
   const productsState = useSelector((state) => state?.product?.products);
 
   const filteredPopular = productsState.filter((prod) => {
     return prod.tags === "popular";
   });
-  
-  useEffect(() => {
-    dispatch(getAProduct(getProductId));
-    dispatch(getUserCart());
-  }, []);
-
-  useEffect(() => {
-    dispatch(getProducts());
-  }, []);
 
   useEffect(() => {
     for (let i = 0; i < cartState?.length; i++) {
@@ -71,6 +66,7 @@ const SingleProduct = () => {
           checked: 'Unchecked',
         })
       );
+      dispatch(getUserCart());
     }
   };
 
@@ -214,8 +210,8 @@ const SingleProduct = () => {
                   <div className="d-flex align-items-center gap-30 ms-5">
                     <button
                       className="button border-0"
-                      data-bs-toggle="modal"
-                      data-bs-target="#staticBackdrop"
+                      // data-bs-toggle="modal"
+                      // data-bs-target="#staticBackdrop"
                       type="button"
                       onClick={() => {
                         alreadyAdded ? navigate("/cart") : uploadCart();

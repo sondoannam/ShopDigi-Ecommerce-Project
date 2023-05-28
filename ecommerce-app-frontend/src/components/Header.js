@@ -11,25 +11,29 @@ const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [totalAmount, setTotalAmount] = useState(0);
-  const userCartState = useSelector((state) => state?.auth?.cartProducts);
   const authState = useSelector((state) => state?.auth);
   const productState = useSelector((state) => state?.product?.products)
   const [productOpt, setProductOpt] = useState([]);
   const [paginate, setPaginate] = useState(true);
-
+  
   // Fetch product cart
   useEffect(() => {
     dispatch(getUserCart());
-  }, [dispatch]);
+  }, []);
+  
+  const userCartState = useSelector((state) => state?.auth?.cartProducts);
 
   // get total amount
   useEffect(() => {
     let sum = 0;
-    for (let index = 0; index < userCartState?.length; index++) {
-      sum +=
-        Number(userCartState[index]?.quantity) * userCartState[index]?.price;
-      setTotalAmount(sum);
+    if (userCartState.length !== 0) {
+      for (let index = 0; index < userCartState?.length; index++) {
+        sum +=
+          Number(userCartState[index]?.quantity) * userCartState[index]?.price;
+        setTotalAmount(sum);
+      }
     }
+    else setTotalAmount(0);
   }, [userCartState]);
 
   useEffect(() => {
@@ -170,19 +174,15 @@ const Header = () => {
                   >
                     <img src="images/cart.svg" alt="cart" />
                     <div className="d-flex flex-column gap-10">
-                      {userCartState && (
                         <span
                           style={{ fontSize: "0.75rem" }}
                           className="badge bg-white text-dark"
                         >
-                          {userCartState?.length ? userCartState?.length : 0}
+                          {userCartState && userCartState?.length}
                         </span>
-                      )}
-                      {(totalAmount !== null || totalAmount !== 0) && (
                         <h6 className="mb-0">
-                          $ {totalAmount ? totalAmount : 0}
+                          $ {userCartState && totalAmount}
                         </h6>
-                      )}
                     </div>
                   </Link>
                 </div>
