@@ -32,7 +32,11 @@ const app = express();
 
 app.use('/api', proxyMiddleware);
 
-app.use(cors());
+app.use(cors({
+    origin: "https://shopdigi-backend.onrender.com",
+    headers: ["Content-Type"],
+    credentials: true,
+}));
 app.use(morgan('dev'));
 
 dbConnect();
