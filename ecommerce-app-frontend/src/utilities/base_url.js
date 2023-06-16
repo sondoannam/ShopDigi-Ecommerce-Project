@@ -1,1 +1,1 @@
-export const base_url = 'https://shopdigi-backend.onrender.com/api/';
+export const base_url = 'https://shopdigi-api.onrender.com/api/';
