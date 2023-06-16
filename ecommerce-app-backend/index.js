@@ -20,12 +20,12 @@ const paymentRouter = require('./routes/paymentRoute');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 
+dbConnect();
+
 const app = express();
 
 app.use(cors());
 app.use(morgan('dev'));
-
-dbConnect();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
