@@ -31,7 +31,7 @@ app.use(function(req, res, next) {
 });
 
 app.use(cors({
-    origin: "https://shopdigi-api.onrender.com",
+    origin: "https://master--delightful-semifreddo-16ef03.netlify.app",
     headers: ["Content-Type"],
     credentials: true,
 }));
