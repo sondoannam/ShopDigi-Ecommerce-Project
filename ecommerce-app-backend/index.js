@@ -24,6 +24,11 @@ const morgan = require('morgan');
 const options = {
     target: 'https://shopdigi-backend.onrender.com', // target host
     changeOrigin: true, // needed for virtual hosted sites
+    ws: true, // proxy websockets
+    pathRewrite: {
+        '^/api/old-path': '/api/new-path', // rewrite path
+        '^/api/remove/path': '/path', // remove base path
+    },
 };
 // create the proxy (without context)
 const proxyMiddleware = createProxyMiddleware(options);
@@ -32,11 +37,7 @@ const app = express();
 
 app.use('/api', proxyMiddleware);
 
-app.use(cors({
-    origin: "https://shopdigi-backend.onrender.com",
-    headers: ["Content-Type"],
-    credentials: true,
-}));
+app.use(cors());
 app.use(morgan('dev'));
 
 dbConnect();
