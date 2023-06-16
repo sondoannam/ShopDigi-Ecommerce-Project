@@ -30,11 +30,8 @@ const app = express();
 //     next();
 // });
 
-app.use(cors({
-    origin: "https://master--delightful-semifreddo-16ef03.netlify.app",
-    headers: ["Content-Type"],
-    credentials: true,
-}));
+app.use(cors());
+app.options('*', cors());
 app.use(morgan('dev'));
 
 app.use(bodyParser.json());
