@@ -25,7 +25,7 @@ dbConnect();
 const app = express();
 
 app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", ".onrender.com"); // update to match the domain you will make the request from
+    res.header("Access-Control-Allow-Origin", "https://master--delightful-semifreddo-16ef03.netlify.app"); // update to match the domain you will make the request from
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
@@ -40,8 +40,6 @@ app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-
-
 
 app.use('/api/user', authRouter);
 app.use('/api/product', productRouter);
