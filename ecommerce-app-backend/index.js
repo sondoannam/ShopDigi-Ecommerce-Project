@@ -1,8 +1,9 @@
-const bodyParser = require('body-parser');
 const express = require('express');
+const { createProxyMiddleware } = require('http-proxy-middleware');
+const cors = require('cors');
+const bodyParser = require('body-parser');
 const dbConnect = require('./config/dbConnect');
 const { notFound, errorHandler } = require('./middlewares/errorHandler');
-const app = express();
 require('dotenv').config();
 const PORT = process.env.PORT || 6000;
 const authRouter = require('./routes/authRoute');
@@ -18,12 +19,24 @@ const uploadRouter = require('./routes/uploadRoute');
 const paymentRouter = require('./routes/paymentRoute');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
-const cors = require('cors');
+
+// setup proxy middleware options
+const options = {
+    target: 'https://shopdigi-backend.onrender.com', // target host
+    changeOrigin: true, // needed for virtual hosted sites
+};
+// create the proxy (without context)
+const proxyMiddleware = createProxyMiddleware(options);
+
+const app = express();
+
+app.use('/api', proxyMiddleware);
+
+app.use(cors());
+app.use(morgan('dev'));
 
 dbConnect();
 
-app.use(morgan('dev'));
-app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
