@@ -22,7 +22,7 @@ const morgan = require('morgan');
 
 // setup proxy middleware options
 const options = {
-    target: 'https://shopdigi-backend.onrender.com', // target host
+    target: 'https://shopdigi-api.onrender.com', // target host
     changeOrigin: true, // needed for virtual hosted sites
     ws: true, // proxy websockets
     pathRewrite: {
@@ -36,6 +36,12 @@ const proxyMiddleware = createProxyMiddleware(options);
 const app = express();
 
 app.use('/api', proxyMiddleware);
+
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "https://shopdigi-api.onrender.com"); // update to match the domain you will make the request from
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 
 app.use(cors());
 app.use(morgan('dev'));
