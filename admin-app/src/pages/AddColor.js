@@ -14,6 +14,7 @@ import {
 
 let schema = yup.object().shape({
   title: yup.string().required("Color is Required"),
+  code: yup.string().required("Color code is Required"),
 });
 
 const AddColor = () => {
@@ -29,6 +30,7 @@ const AddColor = () => {
     createdColor,
     updatedColor,
     colorName,
+    colorCode
   } = newColor;
 
   useEffect(() => {
@@ -50,12 +52,13 @@ const AddColor = () => {
     if (isError) {
       toast.error("Something Went Wrong!");
     }
-  }, [isSuccess, isError, isLoading, createdColor]);
+  }, [isSuccess, isError, isLoading, createdColor, updatedColor]);
 
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
       title: colorName || "",
+      code: colorCode || "",
     },
     validationSchema: schema,
     onSubmit: (values) => {
@@ -90,6 +93,17 @@ const AddColor = () => {
           />
           <div className="error">
             {formik.touched.title && formik.errors.title}
+          </div>
+          <CustomInput
+            type="text"
+            label="Enter Color Code"
+            onChange={formik.handleChange("code")}
+            onBlur={formik.handleBlur("code")}
+            value={formik.values.code}
+            id="color"
+          />
+          <div className="error">
+            {formik.touched.code && formik.errors.code}
           </div>
           <button
             type="submit"

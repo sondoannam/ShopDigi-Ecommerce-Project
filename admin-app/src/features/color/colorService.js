@@ -1,6 +1,6 @@
 import axios from "axios";
 import { base_url } from "../../utilities/base_url";
-import { config } from '../../utilities/axios_config';
+import { config } from "../../utilities/axios_config";
 
 const getColors = async () => {
   const response = await axios.get(`${base_url}color/`, config);
@@ -17,7 +17,7 @@ const createColor = async (color) => {
 const updateColor = async (color) => {
   const response = await axios.put(
     `${base_url}color/${color.id}`,
-    { title: color.colorData.title },
+    { title: color.colorData.title, code: color.colorData.code },
     config
   );
 
@@ -40,7 +40,7 @@ const colorService = {
   createColor,
   updateColor,
   getColor,
-  deleteColor
+  deleteColor,
 };
 
 export default colorService;
