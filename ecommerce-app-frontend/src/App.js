@@ -47,7 +47,7 @@ function App() {
               <Route path="compare" element={<CompareProduct />} />
               <Route path="wishlist" element={<PrivateRoutes><Wishlist /></PrivateRoutes>} />
               <Route path="login" element={<Login />} />
-              <Route path="signup" element={<OpenRoutes><Signup /></OpenRoutes>} />
+              <Route path="register" element={<OpenRoutes><Signup /></OpenRoutes>} />
               <Route path="forgot-password" element={<ForgotPassword />} />
               <Route path="reset-password/:token" element={<ResetPassword />} />
               <Route path="my-profile" element={<PrivateRoutes><Profile /></PrivateRoutes>} />
